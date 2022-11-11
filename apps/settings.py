@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
 from pathlib import Path
 from configs.config import config
 
@@ -39,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "audio.apps.AudioConfig",
+    "django_apscheduler",
+    "job_scheduler.apps.JobSchedulerAppConfig",
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+MP3_ROOT_DIR = "audio_files"
+
+CREATE_MP3_WORKER_INTERVAL_SEC = config.scheduler["interval_sec"]
+CREATE_MP3_BATCH_SIZE = config.scheduler["batch_size"]
