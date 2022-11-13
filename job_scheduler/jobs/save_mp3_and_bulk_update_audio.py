@@ -1,8 +1,8 @@
 import uuid
-import logging
 
 from utils.text.tts_provider import tts_provider
 from utils.filesystem_handler import create_folder
+from utils.orm_id_suffix_handler import set_multi_foreign_key_suffix
 from audio.repositories import audio_repo
 from django.conf import settings
 from audio.services import audio_service
@@ -25,13 +25,11 @@ def _save_mp3_and_set_path(audio_data: dict) -> dict:
     update할 데이터를 dictionary로 return
     """
     file_path = _create_sentence_mp3(audio_data["text"], audio_data["project"])
-    project_id = audio_data["project"]
-    del audio_data["project"]
+    audio_data = set_multi_foreign_key_suffix(audio_data, ["user", "project"])
     return {
         **audio_data,
         "path": file_path,
         "is_audio_required": False,
-        "project_id": project_id,  # orm 사용시, project에 Project 인스턴스를 넣어주거나 project id 값 지정
     }
 
 

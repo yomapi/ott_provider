@@ -9,6 +9,10 @@ databases:
 secrets:
   django: "django-insecure-something"
 
-  scheduler:
-    interval_sec: 2
-    batch_size: 10
+scheduler:
+  interval_sec: 2
+  batch_size: 10
+
+token:
+  scret: "JWT secret key"
+  expire_sec: 3600

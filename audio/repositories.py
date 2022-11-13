@@ -1,33 +1,13 @@
-from rest_framework.serializers import ModelSerializer
-from apps.models import BaseModel
 from audio.models import Audio, Project
 from audio.serializers import ProjectSerializer, AudioSerializer
 from typing import Union
 from utils.orm_filter_mapper import QueryMapper, QueryMapprList
-
-
-class BaseRepo:
-    def __init__(self, model: BaseModel, serializer: ModelSerializer):
-        self.model = model
-        self.serializer = serializer
-
-    def _get_instance(self, id: int) -> Union[BaseModel, None]:
-        try:
-            return self.model.objects.get(id=id)
-        except self.model.DoesNotExist:
-            return None
-
-    def get(self, id: int) -> Union[dict, None]:
-        instance = self._get_instance(id)
-        if instance == None:
-            return instance
-        else:
-            return self.serializer(instance).data
+from apps.repositories import BaseRepo
 
 
 class ProjectRepo(BaseRepo):
-    def create(self, title: str) -> dict:
-        serializer = ProjectSerializer(data={"project_title": title})
+    def create(self, title: str, user_id: int) -> dict:
+        serializer = ProjectSerializer(data={"project_title": title, "user": user_id})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return serializer.data

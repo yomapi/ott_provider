@@ -1,8 +1,14 @@
 from django.db import models
 from apps.models import BaseModel
+from user.models import User as CustomUser
 
 
 class Project(BaseModel):
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.DO_NOTHING,
+        db_column="user_id",
+    )
     project_title = models.CharField(max_length=255, null=False, default="")  # 프로젝트 이름
 
     class Meta:
@@ -16,6 +22,11 @@ class Audio(BaseModel):
         Project,
         on_delete=models.CASCADE,
         db_column="project_id",
+    )
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.DO_NOTHING,
+        db_column="user_id",
     )
     index = models.IntegerField(null=False, default=1)  # 몇 번째 문장인지 나타내는 인덱스
     text = models.CharField(max_length=255, null=False)  # 오디오의 텍스트 내용

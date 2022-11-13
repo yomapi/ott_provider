@@ -46,6 +46,7 @@ class UpdateAudioReqSchema(serializers.Serializer):
 
 
 class CreateAudioReqSchema(serializers.Serializer):
+    project_id = serializers.IntegerField(allow_null=False)
     index = serializers.IntegerField(allow_null=False)  # 몇 번째 문장인지 나타내는 인덱스
     text = serializers.CharField(max_length=255, allow_null=False)  # 오디오의 텍스트 내용
     speed = serializers.IntegerField(allow_null=False)  # 재생 속도

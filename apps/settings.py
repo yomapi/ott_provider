@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "audio.apps.AudioConfig",
     "django_apscheduler",
     "job_scheduler.apps.JobSchedulerAppConfig",
+    "user.apps.UserConfig",
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,7 @@ MP3_ROOT_DIR = "audio_files"
 
 CREATE_MP3_WORKER_INTERVAL_SEC = config.scheduler["interval_sec"]
 CREATE_MP3_BATCH_SIZE = config.scheduler["batch_size"]
+
+# JWT SECRET
+JWT_KEY = config.token["scret"]
+JWT_EXPIRE_TIME = config.token["expire_sec"]
