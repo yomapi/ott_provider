@@ -50,3 +50,12 @@ class CreateAudioReqSchema(serializers.Serializer):
     index = serializers.IntegerField(allow_null=False)  # 몇 번째 문장인지 나타내는 인덱스
     text = serializers.CharField(max_length=255, allow_null=False)  # 오디오의 텍스트 내용
     speed = serializers.IntegerField(allow_null=False)  # 재생 속도
+
+
+class GetPageResponseSchema(serializers.Serializer):
+    cnt = serializers.IntegerField(allow_null=False)
+    page = AudioSerializer(many=True)
+
+
+class IsSuccessResSchema(serializers.Serializer):
+    is_success = serializers.BooleanField()

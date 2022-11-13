@@ -3,6 +3,9 @@ from audio.serializers import (
     CreateProjectReqSchema,
     UpdateAudioReqSchema,
     CreateAudioReqSchema,
+    GetPageResponseSchema,
+    AudioSerializer,
+    IsSuccessResSchema,
 )
 from django.http import JsonResponse, FileResponse
 from rest_framework.decorators import api_view, parser_classes
@@ -13,8 +16,15 @@ from rest_framework.views import APIView
 from rest_framework import status
 from utils.validation import validate_req_params
 from utils.auth_decorators import must_be_user
+from drf_yasg.utils import swagger_auto_schema
+from audio.serializers import ProjectSerializer
 
 
+@swagger_auto_schema(
+    method="post",
+    request_body=CreateProjectReqSchema,
+    responses={201: ProjectSerializer},
+)
 @api_view(["POST"])
 @method_decorator(csrf_exempt)
 @parser_classes([JSONParser])
@@ -29,6 +39,10 @@ def create_project(request):
     )
 
 
+@swagger_auto_schema(
+    method="get",
+    responses={200: GetPageResponseSchema},
+)
 @api_view(["GET"])
 @method_decorator(csrf_exempt)
 @must_be_user()
@@ -56,6 +70,11 @@ def update_audio(request, audio_id: str):
     return JsonResponse(updated, status=status.HTTP_201_CREATED)
 
 
+@swagger_auto_schema(
+    method="post",
+    request_body=CreateAudioReqSchema,
+    responses={201: AudioSerializer},
+)
 @api_view(["POST"])
 @method_decorator(csrf_exempt)
 @parser_classes([JSONParser])
@@ -93,6 +112,10 @@ def get_mp3_file(request, audio_id: str):
     return FileResponse(mp3_file, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    method="delete",
+    responses={201: IsSuccessResSchema},
+)
 @api_view(["DELETE"])
 @method_decorator(csrf_exempt)
 @parser_classes([JSONParser])
@@ -107,8 +130,15 @@ def delete_project(request, project_id: str):
 
 
 class AudioDetailAPI(APIView):
+    @swagger_auto_schema(
+        request_body=UpdateAudioReqSchema,
+        responses={201: AudioSerializer},
+    )
     def post(self, request, audio_id: str):
         return update_audio(request, audio_id)
 
+    @swagger_auto_schema(
+        responses={201: IsSuccessResSchema},
+    )
     def delete(self, request, audio_id: str):
         return delete_audio(request, audio_id)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django_apscheduler",
     "job_scheduler.apps.JobSchedulerAppConfig",
     "user.apps.UserConfig",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
