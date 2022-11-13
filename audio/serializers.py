@@ -26,9 +26,26 @@ class AudioSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CreateProjectSchema(serializers.Serializer):
+class CreateProjectReqSchema(serializers.Serializer):
     title = serializers.CharField(max_length=255)
     sentences = serializers.CharField(max_length=4096)  # about 4KB
 
     def validate_title(self, project_title: str):
         return _validate_title(project_title)
+
+
+class UpdateAudioReqSchema(serializers.Serializer):
+    text = serializers.CharField(max_length=255)
+    speed = serializers.IntegerField()
+
+    def validate_speed(self, speed: int):
+        if speed > 0:
+            return speed
+        else:
+            raise serializers.ValidationError("speed must be bigger than 0")
+
+
+class CreateAudioReqSchema(serializers.Serializer):
+    index = serializers.IntegerField(allow_null=False)  # 몇 번째 문장인지 나타내는 인덱스
+    text = serializers.CharField(max_length=255, allow_null=False)  # 오디오의 텍스트 내용
+    speed = serializers.IntegerField(allow_null=False)  # 재생 속도
