@@ -1,4 +1,9 @@
 __pycache__
 *_real.yml
 .vscode
+.pytest_cache
+.benchmarks
 .DS_Store
+audio_files/**
+!/audio_files/__init__.py
+*.sqlite

@@ -12,6 +12,8 @@ with open(os.path.join(path, filename)) as f:
 class Config:
     databases: dict = yaml_settings["databases"]
     secrets: dict = yaml_settings["secrets"]
+    scheduler: dict = yaml_settings["scheduler"]
+    token: dict = yaml_settings["token"]
 
 
 config = Config()
