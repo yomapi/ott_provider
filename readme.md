@@ -46,11 +46,11 @@ python manage.py runserver
 
 # DB
 
-![스크린샷 2022-11-14 오후 3.09.25.png](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/67787785-2726-469e-80aa-69c24e5c2f52/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-11-14_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.09.25.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221114%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221114T062258Z&X-Amz-Expires=86400&X-Amz-Signature=02379dd3f152fc8b11040a0e27b5e3b51bd84db44fb6688c902e7f39b7db6ee6&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA%25202022-11-14%2520%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE%25203.09.25.png%22&x-id=GetObject)
+![ER 다이어그램](er_digram.png)
 
 # Architecture
 
-![스크린샷 2022-11-14 오후 3.01.54.png](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/1ef04dd5-dc62-4508-be55-b54157b01f94/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-11-14_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.01.54.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221114%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221114T062316Z&X-Amz-Expires=86400&X-Amz-Signature=b74db13e6755277c16eb2d49ca5e3020b087918202b385ee6e69d28f4e028138&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA%25202022-11-14%2520%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE%25203.01.54.png%22&x-id=GetObject)
+![architecture.png](architecture.png)
 
 - view:
     - client의 요청을 받고, service를 호출하고, 결과를 response 합니다
