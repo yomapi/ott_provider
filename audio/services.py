@@ -5,6 +5,7 @@ from utils.orm_filter_mapper import QueryMapper
 from utils.orm_id_suffix_handler import set_multi_foreign_key_suffix
 from django.conf import settings
 from exceptions import InvalidRequestError, AudioFileNotReadyError, NoPermssionError
+from django.db import transaction
 
 
 class AudioService:
@@ -82,11 +83,14 @@ class AudioService:
         프로젝트의 제목을 받아 프로젝트를 생성합니다.
         백그라운드에서 mp3를 생성할 수 있도록 flag를 하여 audio를 bulk create합니다.
         """
-        sentence_list = string_to_sentence_list(sentences)
-        new_project, project_id = self._create_project_and_project_dir(title, user_id)
-        self._bulk_create_audio(project_id, sentence_list, user_id)
-        new_audios = audio_repo.find_by_project_id(project_id)
-        return {"project": new_project, "audio": new_audios}
+        with transaction.atomic():
+            sentence_list = string_to_sentence_list(sentences)
+            new_project, project_id = self._create_project_and_project_dir(
+                title, user_id
+            )
+            self._bulk_create_audio(project_id, sentence_list, user_id)
+            new_audios = audio_repo.find_by_project_id(project_id)
+            return {"project": new_project, "audio": new_audios}
 
     def find_project_page(self, project_id: int, page: int, user_id: int) -> list[dict]:
         """
@@ -165,15 +169,16 @@ class AudioService:
         오디오를 맨 끝의 index에 생성합니다.
         생성된 오디오 정보를 dict로 return
         """
-        insert_index = audio_repo.get_last_index(project_id) + 1
-        create_params = {
-            "project": project_id,
-            "index": insert_index,
-            "text": text,
-            "speed": speed,
-            "user": user_id,
-        }
-        return audio_repo.create(create_params)
+        with transaction.atomic():
+            insert_index = audio_repo.get_last_index(project_id) + 1
+            create_params = {
+                "project": project_id,
+                "index": insert_index,
+                "text": text,
+                "speed": speed,
+                "user": user_id,
+            }
+            return audio_repo.create(create_params)
 
     def _insert_audio_and_update_indexs(
         self, project_id: int, index: int, text: str, speed: int, user_id: int
@@ -182,17 +187,17 @@ class AudioService:
         오디오를 지정한 위치에 생성하고, 뒤로 밀려나게 되는 audio의 index를 업데이트 합니다.
         생성된 오디오 정보를 dict로 return
         """
-        # TODO: trasaction 처리
-        self._update_audios_index(project_id, index, is_increase=True)
-        create_params = {
-            "project": project_id,
-            "index": index,
-            "text": text,
-            "speed": speed,
-            "user": user_id,
-        }
-        new_audio = audio_repo.create(create_params)
-        return new_audio
+        with transaction.atomic():
+            self._update_audios_index(project_id, index, is_increase=True)
+            create_params = {
+                "project": project_id,
+                "index": index,
+                "text": text,
+                "speed": speed,
+                "user": user_id,
+            }
+            new_audio = audio_repo.create(create_params)
+            return new_audio
 
     def create_audio(
         self, project_id: int, index: int, text: str, speed: int, user_id: int

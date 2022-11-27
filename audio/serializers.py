@@ -21,6 +21,12 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class AudioSerializer(serializers.ModelSerializer):
+    def validate_speed(self, speed: int):
+        if speed > 0:
+            return speed
+        else:
+            raise serializers.ValidationError("Audio speed must bigger than 0")
+
     class Meta:
         model = Audio
         fields = "__all__"
