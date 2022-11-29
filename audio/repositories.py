@@ -115,9 +115,17 @@ class AudioRepo(BaseRepo):
             many=True,
         ).data
 
-    def find_order_by_update_at(self, limit: int) -> list[dict]:
+    def find_for_update(self, limit: int, skip_locked: bool = True) -> list[dict]:
+        """
+        update를 위해서 select 합니다.
+        다른 transaction에 의해 lock이 걸려있을 경우 skip 하는 것을 default로 합니다.
+        """
         return AudioSerializer(
-            Audio.objects.filter(is_audio_required=True).order_by("updated_at")[:limit],
+            Audio.objects.select_for_update(
+                skip_locked=skip_locked, nowait=not skip_locked
+            )
+            .filter(is_audio_required=True)
+            .order_by("updated_at")[:limit],
             many=True,
         ).data
 

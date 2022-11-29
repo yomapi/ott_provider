@@ -1,11 +1,11 @@
 import uuid
-
 from utils.text.tts_provider import tts_provider
 from utils.filesystem_handler import create_folder
 from utils.orm_id_suffix_handler import set_multi_foreign_key_suffix
 from audio.repositories import audio_repo
 from django.conf import settings
 from audio.services import audio_service
+from django.db import transaction
 
 
 def _create_sentence_mp3(sentence: str, project_id: int) -> str:
@@ -38,9 +38,10 @@ def save_mp3_and_bulk_update_audio() -> None:
     DB에서 지정한 batch size 만큼, mp3 생성이 필요한 audio를 가져옵니다.
     mp3 파일 생성 후, audio를 bulk update 해줍니다.
     """
-    target_audios = audio_repo.find_order_by_update_at(
-        limit=settings.CREATE_MP3_BATCH_SIZE
-    )
-    mp3_saved_audios = list(map(lambda x: _save_mp3_and_set_path(x), target_audios))
-    audio_repo.bulk_update(mp3_saved_audios, ["path", "is_audio_required"])
-    return
+    with transaction.atomic():
+        target_audios = audio_repo.find_for_update(limit=settings.CREATE_MP3_BATCH_SIZE)
+        mp3_saved_audios = list(map(lambda x: _save_mp3_and_set_path(x), target_audios))
+        if len(mp3_saved_audios):
+            audio_repo.bulk_update(
+                mp3_saved_audios, ["path", "is_audio_required", "text"]
+            )
